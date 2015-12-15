@@ -1,0 +1,33 @@
+<installation version="5.0">
+    <info>
+        <appname>@{project.name}</appname>
+        <appversion>@{project.version}</appversion>
+        <authors>
+            <author name="Vincent Ortland" email="vincent.ortland@gmx.de" />
+        </authors>
+        <url>http://www.himbiss.de</url>
+        <javaversion>1.8</javaversion>
+        <requiresjdk>no</requiresjdk>
+    </info>
+
+    <guiprefs width="640" height="480" resizable="yes" />
+
+    <locale>
+        <langpack iso3="eng" />
+    </locale>
+
+    <panels>
+        <panel classname="HelloPanel" />
+        <panel classname="TargetPanel"/>
+        <panel classname="InstallPanel"/>
+        <panel classname="FinishPanel" />
+    </panels>
+
+    <packs>
+        <pack name="Core" required="yes">
+            <description>Core installation files</description>
+            <file src="../@{project.build.finalName}.jar" targetdir="$INSTALL_PATH" unpack="true" />
+        </pack>
+    </packs>
+
+</installation>
