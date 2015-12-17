@@ -5,31 +5,33 @@ package de.himbiss.quizme;
  */
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import org.jboss.logging.Logger;
+
+import java.io.IOException;
+import java.net.URL;
 
 public class QuizMe extends Application {
+
+    private static final String MAIN_FXML = "fxml/QuizMe.fxml";
+    private static final Logger logger = Logger.getLogger(QuizMe.class);
 
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
-    public void start(Stage primaryStage) {
-        Button btn = new Button();
-        btn.setText("Say 'Hello World'");
-        btn.setOnAction(event -> System.out.println("Hello World!"));
-
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
-
-        Scene scene = new Scene(root, 300, 250);
-
-        primaryStage.setTitle("Hello World!");
+    public void start(Stage primaryStage) throws IOException {
+        URL resourceURL = getClass().getClassLoader().getResource(MAIN_FXML);
+        if (resourceURL == null) {
+            logger.fatal("Could not find main fxml file: " + MAIN_FXML);
+            return;
+        }
+        Pane root = FXMLLoader.load(resourceURL);
+        Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
