@@ -8,12 +8,61 @@
     <artifactId>QuizMe</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.190</version>
+        </dependency>
+        <!-- for JPA, use hibernate-entitymanager instead of hibernate-core -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>5.0.5.Final</version>
+        </dependency>
+
+        <!-- optional -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-osgi</artifactId>
+            <version>5.0.5.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-envers</artifactId>
+            <version>5.0.5.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-c3p0</artifactId>
+            <version>5.0.5.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-proxool</artifactId>
+            <version>5.0.5.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-infinispan</artifactId>
+            <version>5.0.5.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-ehcache</artifactId>
+            <version>5.0.5.Final</version>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>3.8.1</version>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -21,19 +70,45 @@
     <properties>
         <!-- Global variables -->
         <project.name>QuizMe</project.name>
-        <project.version>${version}</project.version>
+        <project.version>${project.version}</project.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.finalName>${project.artifactId}-${project.version}</project.build.finalName>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- Installer variables -->
-        <izpack.version>5.0.0</izpack.version>
+        <izpack.version>5.0.6</izpack.version>
         <izpack.staging>${project.build.directory}/staging</izpack.staging>
     </properties>
 
 
     <build>
         <plugins>
+            <!-- Configure the jar plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <finalName>${project.build.finalName}-FINAL</finalName>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <archive>
+                        <manifest>
+                            <mainClass>de.himbiss.quizme.QuizMe</mainClass>
+                        </manifest>
+                    </archive>
+                    <appendAssemblyId>false</appendAssemblyId>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id> <!-- this is used for inheritance merges -->
+                        <phase>package</phase> <!-- bind to the packaging phase -->
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <!-- Configure the compiler to use Java 1.8 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -60,6 +135,15 @@
                                 <copy todir="${izpack.staging}">
                                     <fileset dir="${basedir}/src/main/izpack"/>
                                 </copy>
+                                <copy todir="${izpack.staging}/img">
+                                    <fileset dir="${basedir}/src/main/resources/img"/>
+                                </copy>
+                                <echo file="${izpack.staging}/start.bat">
+                                    start javaw -XX:+AggressiveHeap -jar ${project.build.finalName}.jar
+                                </echo>
+                                <echo file="${izpack.staging}/start.sh">
+                                    javaw -XX:+AggressiveHeap -jar ${project.build.finalName}.jar
+                                </echo>
                             </tasks>
                         </configuration>
                     </execution>
@@ -72,10 +156,6 @@
                 <configuration>
                     <excludeTransitive>false</excludeTransitive>
                     <!-- reference our custom panels jar in our installer descriptor without its version -->
-                    <stripVersion>true</stripVersion>
-                    <overWriteReleases>true</overWriteReleases>
-                    <overWriteSnapshots>true</overWriteSnapshots>
-                    <overWriteIfNewer>true</overWriteIfNewer>
                 </configuration>
                 <executions>
                     <execution>
@@ -124,6 +204,7 @@
                             <!-- base for relative paths in izpack descriptor -->
                             <baseDir>${izpack.staging}</baseDir>
                             <installFile>${basedir}/src/main/izpack/install.xml</installFile>
+                            <jarName>${project.build.finalName}-INSTALL</jarName>
                         </configuration>
                     </execution>
                 </executions>

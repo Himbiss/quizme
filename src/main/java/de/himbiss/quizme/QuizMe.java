@@ -25,6 +25,7 @@ public class QuizMe extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
+        primaryStage.setTitle("QuizMe");
         URL resourceURL = getClass().getClassLoader().getResource(MAIN_FXML);
         if (resourceURL == null) {
             logger.fatal("Could not find main fxml file: " + MAIN_FXML);

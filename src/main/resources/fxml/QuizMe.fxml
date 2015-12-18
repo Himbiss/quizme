@@ -4,12 +4,10 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0"
-      xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.himbiss.quizme.fxml_controller.QuizMeController">
-    <children>
-        <Button fx:id="button" layoutX="19.0" layoutY="217.0" mnemonicParsing="false"
-                onAction="#buttonPressed" prefHeight="25.0" prefWidth="550.0" text="moveOver" />
-        <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="600.0">
+
+<AnchorPane minHeight="400.0" minWidth="600.0" prefHeight="616.0" prefWidth="864.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.himbiss.quizme.fxml_controller.QuizMeController">
+   <children>
+        <MenuBar layoutY="2.0" maxHeight="40.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <menus>
                 <Menu mnemonicParsing="false" text="File">
                     <items>
@@ -28,7 +26,15 @@
                 </Menu>
             </menus>
         </MenuBar>
-        <Label fx:id="label" layoutX="19.0" layoutY="252.0" prefHeight="134.0" prefWidth="550.0" text="Label" />
-        <TextArea fx:id="textArea" layoutX="19.0" layoutY="42.0" prefHeight="161.0" prefWidth="550.0" />
-    </children>
-</Pane>
+      <SplitPane dividerPositions="0.22" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="589.0" prefWidth="199.0">
+               <children>
+                  <ListView prefHeight="200.0" prefWidth="204.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>

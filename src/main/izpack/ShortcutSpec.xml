@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+
+<shortcuts>
+    <!--skipIfNotSupported/-->
+    <programGroup defaultName="QuizMe" location="applications"/>
+
+    <shortcut name="QuizMe"
+              target="$INSTALL_PATH/start.bat"
+              workingDirectory="$INSTALL_PATH"
+              description="Multiple-Choice Tester"
+              iconFile="$INSTALL_PATH/icon.ico"
+              initialState="normal"
+              programGroup="yes"
+              desktop="yes"
+              applications="no"
+              startMenu="no"
+              startup="no"
+              encoding="UTF-8">
+        <createForPack name="Core"/>
+    </shortcut>
+
+</shortcuts>
