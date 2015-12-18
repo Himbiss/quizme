@@ -18,7 +18,7 @@ public class Quiz {
 
     private final String name;
 
-    @OneToMany(mappedBy="question",cascade=CascadeType.PERSIST)
+    @OneToMany(mappedBy="question", cascade = CascadeType.PERSIST)
     private final List<Question> questionList = new ArrayList<>();
 
     Quiz (String name) {
@@ -59,5 +59,13 @@ public class Quiz {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (questionList != null ? questionList.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Quiz{" +
+                "name='" + name + '\'' +
+                ", id=" + id +
+                '}';
     }
 }

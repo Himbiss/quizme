@@ -6,6 +6,7 @@ import org.hibernate.Session;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by Vincent on 17.12.2015.
@@ -33,6 +34,7 @@ public class QuizDAO {
 
     public Quiz saveQuiz(Quiz quiz) {
         for (Question question : quiz.getQuestionList()) {
+            question.getAnswers().forEach(this::persistObject);
             persistObject(question);
         }
         return persistObject(quiz);
@@ -56,5 +58,19 @@ public class QuizDAO {
     public void shutdown() {
         if (session.isConnected() && session.isOpen())
             session.disconnect();
+    }
+
+    public void deleteQuiz(Quiz quiz) {
+        for (Question question : quiz.getQuestionList()) {
+            question.getAnswers().forEach(this::deleteObject);
+            deleteObject(question);
+        }
+        deleteObject(quiz);
+    }
+
+    private void deleteObject(Object object) {
+        session.beginTransaction();
+        session.delete(object);
+        session.getTransaction().commit();
     }
 }

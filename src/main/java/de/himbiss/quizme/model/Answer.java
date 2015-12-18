@@ -13,12 +13,13 @@ public class Answer {
     @GeneratedValue
     private Long id;
 
-    private String answer;
-
     @ManyToOne
     private Question question;
 
-    private boolean isTrue;
+    @Lob
+    private String answer;
+
+    private Boolean isTrue;
 
     public Answer(Question question, String answer, boolean isTrue) {
         this.question = question;
@@ -32,5 +33,35 @@ public class Answer {
 
     public boolean isTrue() {
         return isTrue;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Answer answer1 = (Answer) o;
+
+        if (question != null ? !question.equals(answer1.question) : answer1.question != null) return false;
+        if (answer != null ? !answer.equals(answer1.answer) : answer1.answer != null) return false;
+        return !(isTrue != null ? !isTrue.equals(answer1.isTrue) : answer1.isTrue != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = question != null ? question.hashCode() : 0;
+        result = 31 * result + (answer != null ? answer.hashCode() : 0);
+        result = 31 * result + (isTrue != null ? isTrue.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Answer{" +
+                "id=" + id +
+                ", answer='" + answer + '\'' +
+                ", isTrue=" + isTrue +
+                '}';
     }
 }

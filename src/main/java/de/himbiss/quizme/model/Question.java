@@ -18,9 +18,10 @@ public class Question {
     @GeneratedValue
     private Long id;
 
+    @Lob
     private String question;
 
-    @OneToMany(mappedBy="answer",cascade=CascadeType.PERSIST)
+    @OneToMany(mappedBy="answer", cascade = CascadeType.PERSIST)
     private final List<Answer> answers = new ArrayList<>();
 
     @ManyToOne
@@ -71,5 +72,14 @@ public class Question {
         result = 31 * result + (answers != null ? answers.hashCode() : 0);
         result = 31 * result + (quiz != null ? quiz.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Question{" +
+                "id=" + id +
+                ", question='" + question + '\'' +
+                ", quiz=" + quiz +
+                '}';
     }
 }
