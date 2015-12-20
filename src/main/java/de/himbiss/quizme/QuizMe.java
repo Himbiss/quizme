@@ -1,23 +1,22 @@
 package de.himbiss.quizme;
 
-/**
- * Created by Vincent on 15.12.2015.
- */
+
 
 import de.himbiss.quizme.model.QuizDAO;
 import de.himbiss.quizme.util.Resources;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import org.jboss.logging.Logger;
 
 import java.io.IOException;
 
+/**
+ * Created by Vincent on 15.12.2015.
+ */
 public class QuizMe extends Application {
 
     private static final Logger logger = Logger.getLogger(QuizMe.class);
@@ -34,7 +33,7 @@ public class QuizMe extends Application {
         primaryStage.getIcons().add(new Image(QuizMe.class.getClassLoader().getResourceAsStream("img/icon.png")));
         primaryStage.setOnCloseRequest( e -> shutdown() );
 
-        Pane root = Resources.getInstance().getFXML(Resources.MAIN_FXML);
+        Pane root = Resources.getInstance().loadFXML(Resources.MAIN_FXML).getRoot();
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.show();

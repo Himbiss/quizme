@@ -1,9 +1,11 @@
 package de.himbiss.quizme.fxml_controller;
 
+import com.cathive.fx.guice.GuiceFXMLLoader;
 import com.sun.javafx.collections.ObservableListWrapper;
 import de.himbiss.quizme.QuizMe;
 import de.himbiss.quizme.model.Quiz;
 import de.himbiss.quizme.model.QuizDAO;
+import de.himbiss.quizme.util.QuizMeProperties;
 import de.himbiss.quizme.util.Resources;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -28,6 +30,9 @@ public class QuizMeController implements Initializable {
     @FXML
     AnchorPane contentAnchorPane;
 
+    @FXML
+    Label versionLabel;
+
     ObservableList<Quiz> quizList;
 
     @Override
@@ -35,6 +40,7 @@ public class QuizMeController implements Initializable {
         quizList = new ObservableListWrapper<>(new ArrayList<>(QuizDAO.getInstance().getAllQuizzes()));
         quizListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         quizListView.setItems(quizList);
+        versionLabel.setText("Version: " + QuizMeProperties.getInstance().getVersion());
     }
 
     @FXML
@@ -64,10 +70,16 @@ public class QuizMeController implements Initializable {
 
     @FXML
     public void handleEditQuiz() {
+
         Quiz quiz = quizListView.getSelectionModel().getSelectedItem();
         if (quiz != null) {
-            contentAnchorPane.getChildren().clear();
-            contentAnchorPane.getChildren().add(Resources.getInstance().getFXML(Resources.QUIZ_FXML));
+            GuiceFXMLLoader.Result result = Resources.getInstance().loadFXML(Resources.EDIT_QUIZ_FXML);
+            if (result != null) {
+                contentAnchorPane.getChildren().clear();
+                contentAnchorPane.getChildren().add(result.getRoot());
+                EditQuizController editQuizController = result.getController();
+                editQuizController.setQuiz(quiz);
+            }
         }
     }
 

@@ -1,5 +1,7 @@
 package de.himbiss.quizme.model;
 
+import de.himbiss.quizme.util.QuizMeProperties;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -23,7 +25,7 @@ public class Quiz implements Serializable {
     @OneToMany(cascade = CascadeType.ALL)
     private final List<Question> questionList = new ArrayList<>();
 
-    private Quiz() {
+    Quiz() {
     }
 
     Quiz (String name) {
@@ -68,9 +70,14 @@ public class Quiz implements Serializable {
 
     @Override
     public String toString() {
-        return "Quiz{" +
-                "name='" + name + '\'' +
-                ", id=" + id +
-                '}';
+        if (QuizMeProperties.getInstance().isDebugMode()) {
+            return "Quiz{" +
+                    "name='" + name + '\'' +
+                    ", id=" + id +
+                    '}';
+        }
+        else {
+            return name;
+        }
     }
 }

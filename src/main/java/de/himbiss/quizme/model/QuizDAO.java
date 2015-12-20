@@ -1,21 +1,14 @@
 package de.himbiss.quizme.model;
 
-import com.sun.javafx.runtime.SystemProperties;
-import javafx.application.Application;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.jboss.logging.Logger;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.persistence.spi.PersistenceProvider;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Properties;
 
 /**
  * Created by Vincent on 17.12.2015.
@@ -47,10 +40,6 @@ public class QuizDAO {
 
     public Quiz saveQuiz(Quiz quiz) {
         logger.info("Saving Quiz '" + quiz + "'");
-        /*for (Question question : quiz.getQuestionList()) {
-            question.getAnswers().forEach(this::persistObject);
-            persistObject(question);
-        }*/
         return persistObject(quiz);
     }
 

@@ -1,12 +1,12 @@
 package de.himbiss.quizme.util;
 
-import javafx.fxml.FXMLLoader;
+import com.cathive.fx.guice.GuiceFXMLLoader;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import org.jboss.logging.Logger;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Vincent on 19.12.2015.
@@ -14,14 +14,17 @@ import java.util.Map;
 public class Resources {
 
     public static final String MAIN_FXML = "/fxml/QuizMe.fxml";
-    public static final String QUIZ_FXML = "/fxml/Quiz.fxml";
+    public static final String TAKE_QUIZ_FXML = "/fxml/TakeQuiz.fxml";
+    public static final String EDIT_QUIZ_FXML = "/fxml/EditQuiz.fxml";
+
+    private final Injector injector = Guice.createInjector(new GuiceModule());
     private static Resources instance;
 
     private final Logger logger = Logger.getLogger(Resources.class);
-    private Map<String, Object> loadedFXMLResources = new HashMap<>();
+    private final GuiceFXMLLoader loader = new GuiceFXMLLoader(injector, GuiceModule.fxmlLoadingScope);
 
     private Resources() {
-        preloadFXMLFiles();
+
     }
 
     public static Resources getInstance() {
@@ -30,25 +33,23 @@ public class Resources {
         return instance;
     }
 
-    public <T> T getFXML(String fxmlPath) {
-        return (T) loadedFXMLResources.get(fxmlPath);
+    public GuiceFXMLLoader.Result loadFXML(String fxmlPath) {
+        URL url = loadFXMLFile(fxmlPath);
+        try {
+            return loader.load(url);
+        } catch (IOException e) {
+            logger.fatal("Error loading fxml file: " + fxmlPath, e);
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    private <T> T loadFXML(String fxmlPath) throws IOException {
+    private URL loadFXMLFile(String fxmlPath) {
         URL url = getClass().getResource(fxmlPath);
         if (url == null) {
             logger.fatal("Could not find fxml file: " + fxmlPath);
         }
-        return FXMLLoader.load(url);
+        return url;
     }
 
-    private void preloadFXMLFiles() {
-        try {
-            loadedFXMLResources.put(MAIN_FXML, loadFXML(MAIN_FXML));
-            loadedFXMLResources.put(QUIZ_FXML, loadFXML(QUIZ_FXML));
-        }
-        catch (IOException ioe) {
-            logger.fatal("Error preloading FXML files: ", ioe);
-        }
-    }
 }

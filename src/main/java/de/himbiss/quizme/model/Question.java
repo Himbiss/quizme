@@ -1,5 +1,6 @@
 package de.himbiss.quizme.model;
 
+import de.himbiss.quizme.util.QuizMeProperties;
 import org.omg.CORBA.Any;
 
 import javax.persistence.*;
@@ -29,7 +30,7 @@ public class Question implements Serializable {
     @ManyToOne
     private Quiz quiz;
 
-    private Question() {
+    Question() {
 
     }
 
@@ -82,10 +83,15 @@ public class Question implements Serializable {
 
     @Override
     public String toString() {
-        return "Question{" +
-                "id=" + id +
-                ", question='" + question + '\'' +
-                ", quiz=" + quiz +
-                '}';
+        if (QuizMeProperties.getInstance().isDebugMode()) {
+            return "Question{" +
+                    "id=" + id +
+                    ", question='" + question + '\'' +
+                    ", quiz=" + quiz +
+                    '}';
+        }
+        else {
+            return question;
+        }
     }
 }

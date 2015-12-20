@@ -1,5 +1,7 @@
 package de.himbiss.quizme.model;
 
+import de.himbiss.quizme.util.QuizMeProperties;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -24,7 +26,7 @@ public class Answer implements Serializable {
     @Column(name = "answer_is_true")
     private Boolean isTrue;
 
-    private Answer() {
+    Answer() {
 
     }
 
@@ -65,10 +67,15 @@ public class Answer implements Serializable {
 
     @Override
     public String toString() {
-        return "Answer{" +
-                "id=" + id +
-                ", answer='" + answer + '\'' +
-                ", isTrue=" + isTrue +
-                '}';
+        if (QuizMeProperties.getInstance().isDebugMode()) {
+            return "Answer{" +
+                    "id=" + id +
+                    ", answer='" + answer + '\'' +
+                    ", isTrue=" + isTrue +
+                    '}';
+        }
+        else {
+            return answer;
+        }
     }
 }
