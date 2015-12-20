@@ -1,25 +1,32 @@
 package de.himbiss.quizme.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Created by Vincent on 17.12.2015.
  */
 @Entity
-@Table
-public class Answer {
+@Table(name = "Answer")
+public class Answer implements Serializable {
 
     @Id
     @GeneratedValue
+    @Column(name = "answer_id")
     private Long id;
 
     @ManyToOne
     private Question question;
 
-    @Lob
+    @Column(name = "answer_answer")
     private String answer;
 
+    @Column(name = "answer_is_true")
     private Boolean isTrue;
+
+    private Answer() {
+
+    }
 
     public Answer(Question question, String answer, boolean isTrue) {
         this.question = question;

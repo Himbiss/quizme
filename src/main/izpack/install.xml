@@ -16,11 +16,25 @@
         <requiresjdk>no</requiresjdk>
     </info>
 
-    <guiprefs width="640" height="480" resizable="yes" />
+    <guiprefs width="640" height="480" resizable="yes">
+        <modifier key="layoutAnchor" value="CENTER"/>
+        <modifier key="useHeadingPanel" value="yes"/>
+        <modifier key="useHeadingForSummary" value="yes"/>
+        <modifier key="headingImageOnLeft" value="yes"/>
+        <modifier key="headingLineCount" value="2"/>
+        <modifier key="headingFontSize" value="1.5"/>
+        <modifier key="headingBackgroundColor" value="0x00ffffff"/>
+        <modifier key="headingPanelCounter" value="text"/>
+        <modifier key="headingPanelCounterPos" value="inHeading"/>
+    </guiprefs>
 
 
     <resources>
         <res id="shortcutSpec.xml" src="./shortcutSpec.xml" />
+        <res id="LicencePanel.licence" src="legal/License.txt"/>
+        <res id="JFrameIcon.png" src="img/icon.png"/>
+        <res id="customicons.xml" src="./customicons.xml" />
+        <res id="Heading.image" src="img/icon.png"/>
     </resources>
 
 
@@ -30,10 +44,12 @@
 
     <locale>
         <langpack iso3="deu" />
+        <langpack iso3="eng" />
     </locale>
 
     <panels>
         <panel classname="HelloPanel" />
+        <panel classname="LicencePanel"/>
         <panel classname="TargetPanel"/>
         <panel classname="InstallPanel"/>
         <panel classname="ShortcutPanel"/>

@@ -3,6 +3,7 @@ package de.himbiss.quizme.model;
 import org.omg.CORBA.Any;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -11,21 +12,26 @@ import java.util.List;
  * Created by Vincent on 17.12.2015.
  */
 @Entity
-@Table
-public class Question {
+@Table(name = "Question")
+public class Question implements Serializable {
 
     @Id
     @GeneratedValue
+    @Column(name = "question_id")
     private Long id;
 
-    @Lob
+    @Column(name = "question_name")
     private String question;
 
-    @OneToMany(mappedBy="answer", cascade = CascadeType.PERSIST)
+    @OneToMany(cascade = CascadeType.ALL)
     private final List<Answer> answers = new ArrayList<>();
 
     @ManyToOne
     private Quiz quiz;
+
+    private Question() {
+
+    }
 
     public Question(Quiz quiz) {
         this.quiz = quiz;

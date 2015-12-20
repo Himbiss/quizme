@@ -1,6 +1,7 @@
 package de.himbiss.quizme.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -9,17 +10,21 @@ import java.util.List;
  * Created by Vincent on 17.12.2015.
  */
 @Entity
-@Table
-public class Quiz {
+@Table(name = "Quiz")
+public class Quiz implements Serializable {
 
-    @Id
-    @GeneratedValue
+    @Column(name = "quiz_id")
     private Long id;
 
-    private final String name;
+    @Id
+    @Column(name = "quiz_name")
+    private String name;
 
-    @OneToMany(mappedBy="question", cascade = CascadeType.PERSIST)
+    @OneToMany(cascade = CascadeType.ALL)
     private final List<Question> questionList = new ArrayList<>();
+
+    private Quiz() {
+    }
 
     Quiz (String name) {
         this.name = name;

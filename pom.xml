@@ -12,14 +12,19 @@
 
     <dependencies>
         <dependency>
+            <groupId>jboss</groupId>
+            <artifactId>jnp-client</artifactId>
+            <version>4.2.2.GA</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
             <version>2.5</version>
         </dependency>
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>1.4.190</version>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>2.3.2</version>
         </dependency>
         <!-- for JPA, use hibernate-entitymanager instead of hibernate-core -->
         <dependency>
@@ -29,6 +34,21 @@
         </dependency>
 
         <!-- optional -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.7.0-rc2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.7.0-rc2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.18.2-GA</version>
+        </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-osgi</artifactId>
@@ -83,7 +103,7 @@
 
     <build>
         <plugins>
-            <!-- Configure the jar plugin -->
+            <!-- Configure the jar-assembly plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -120,6 +140,25 @@
                 </configuration>
             </plugin>
 
+            <!-- appbundle plugin for mac osx builds -->
+            <plugin>
+                <groupId>sh.tak.appbundler</groupId>
+                <artifactId>appbundle-maven-plugin</artifactId>
+                <version>1.0.4</version>
+                <configuration>
+                    <mainClass>de.himbiss.quizme.QuizMe</mainClass>
+                    <generateDiskImageFile>true</generateDiskImageFile>
+                    <iconFile>${basedir}/src/main/resources/img/icon.icns</iconFile>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>bundle</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <!-- Configure Maven Ant Plugin -->
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
@@ -139,10 +178,10 @@
                                     <fileset dir="${basedir}/src/main/resources/img"/>
                                 </copy>
                                 <echo file="${izpack.staging}/start.bat">
-                                    start javaw -XX:+AggressiveHeap -jar ${project.build.finalName}.jar
+                                    start javaw -XX:+AggressiveHeap -jar ${project.build.finalName}-FINAL.jar
                                 </echo>
                                 <echo file="${izpack.staging}/start.sh">
-                                    javaw -XX:+AggressiveHeap -jar ${project.build.finalName}.jar
+                                    javaw -XX:+AggressiveHeap -jar ${project.build.finalName}-FINAL.jar
                                 </echo>
                             </tasks>
                         </configuration>

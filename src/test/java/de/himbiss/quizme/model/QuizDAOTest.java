@@ -1,8 +1,12 @@
 package de.himbiss.quizme.model;
 
 import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -20,7 +24,7 @@ public class QuizDAOTest {
     private Quiz quiz;
 
     @After
-    public void clearH2Database() {
+    public void clearDatabase() {
         if (quiz != null) {
             QuizDAO.getInstance().deleteQuiz(quiz);
         }
