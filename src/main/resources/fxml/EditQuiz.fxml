@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+
 <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.himbiss.quizme.fxml_controller.EditQuizController">
     <children>
         <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -17,23 +20,23 @@
                 </HBox>
             </top>
             <center>
-            <HBox spacing="10.0" BorderPane.alignment="TOP_CENTER">
+            <HBox alignment="TOP_CENTER" spacing="10.0" BorderPane.alignment="TOP_CENTER">
                <children>
-                  <VBox prefHeight="200.0" prefWidth="100.0">
+                  <VBox>
                      <children>
-                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
                            <children>
                               <Label contentDisplay="CENTER" text="Questions" />
                               <Button mnemonicParsing="false" onAction="#handleAddQuestion" text="Add" />
                               <Button mnemonicParsing="false" onAction="#handleRemoveQuestion" text="Remove" />
                            </children>
                         </HBox>
-                        <ListView fx:id="questionsListView" minHeight="-Infinity" minWidth="-Infinity" prefHeight="291.0" prefWidth="225.0" />
+                        <ListView fx:id="questionsListView" minHeight="-Infinity" minWidth="-Infinity" />
                      </children>
                   </VBox>
-                  <VBox prefHeight="200.0" prefWidth="100.0">
+                  <VBox>
                      <children>
-                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
                            <children>
                               <Label text="Answers" />
                               <Button mnemonicParsing="false" onAction="#handleAddAnswer" text="Add">
@@ -44,7 +47,7 @@
                               <Button mnemonicParsing="false" onAction="#handleRemoveAnswer" text="Remove" />
                            </children>
                         </HBox>
-                        <ListView fx:id="answersListView" minHeight="-Infinity" minWidth="-Infinity" prefHeight="291.0" prefWidth="225.0" />
+                        <ListView fx:id="answersListView" minHeight="-Infinity" minWidth="-Infinity" />
                      </children>
                   </VBox>
                </children>

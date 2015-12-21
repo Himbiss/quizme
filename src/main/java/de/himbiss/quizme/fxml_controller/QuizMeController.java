@@ -2,15 +2,21 @@ package de.himbiss.quizme.fxml_controller;
 
 import com.cathive.fx.guice.GuiceFXMLLoader;
 import com.sun.javafx.collections.ObservableListWrapper;
+import com.sun.javafx.css.converters.StringConverter;
 import de.himbiss.quizme.QuizMe;
 import de.himbiss.quizme.model.Quiz;
 import de.himbiss.quizme.model.QuizDAO;
 import de.himbiss.quizme.util.QuizMeProperties;
 import de.himbiss.quizme.util.Resources;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.TextFieldListCell;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
@@ -37,6 +43,24 @@ public class QuizMeController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         quizList = new ObservableListWrapper<>(new ArrayList<>(QuizDAO.getInstance().getAllQuizzes()));
         quizListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        quizListView.setOnMouseClicked( e -> handleEditQuiz());
+        quizListView.setEditable(true);
+        quizListView.setCellFactory(TextFieldListCell.forListView(new javafx.util.StringConverter<Quiz>() {
+            private Quiz quiz;
+
+            @Override
+            public String toString(Quiz quiz) {
+                this.quiz = quiz;
+                return quiz.getName();
+            }
+
+            @Override
+            public Quiz fromString(String string) {
+                quiz.setName(string);
+                return quiz;
+            }
+        }));
+        quizListView.setOnEditCommit(this::onEditCommit);
         quizListView.setItems(quizList);
         setWelcomeViewContent();
     }
@@ -73,9 +97,14 @@ public class QuizMeController implements Initializable {
             GuiceFXMLLoader.Result result = Resources.getInstance().loadFXML(Resources.EDIT_QUIZ_FXML);
             if (result != null) {
                 contentAnchorPane.getChildren().clear();
-                contentAnchorPane.getChildren().add(result.getRoot());
+                Node root = result.getRoot();
+                contentAnchorPane.getChildren().add(root);
+                AnchorPane.setLeftAnchor(root, 0.);
+                AnchorPane.setTopAnchor(root, 0.);
+                AnchorPane.setRightAnchor(root, 0.);
+                AnchorPane.setBottomAnchor(root, 0.);
                 currentEditQuizController = result.getController();
-                currentEditQuizController.setQuiz(quiz.getName());
+                currentEditQuizController.setQuiz(quiz);
             }
         }
     }
@@ -101,6 +130,11 @@ public class QuizMeController implements Initializable {
     }
 
     @FXML
+    private void onEditCommit(ListView.EditEvent<Quiz> editEvent) {
+        System.out.println("AAAAAA");
+    }
+
+    @FXML
     public void handleExit() {
         QuizMe.shutdown();
     }
@@ -108,14 +142,22 @@ public class QuizMeController implements Initializable {
     private void setWelcomeViewContent() {
         GuiceFXMLLoader.Result result = Resources.getInstance().loadFXML(Resources.WELCOME_FXML);
         contentAnchorPane.getChildren().clear();
-        contentAnchorPane.getChildren().add(result.getRoot());
+        Node root = result.getRoot();
+        contentAnchorPane.getChildren().add(root);
+        AnchorPane.setLeftAnchor(root, 0.);
+        AnchorPane.setTopAnchor(root, 0.);
+        AnchorPane.setRightAnchor(root, 0.);
+        AnchorPane.setBottomAnchor(root, 0.);
         currentEditQuizController = null;
     }
 
     @FXML
     public void handleAbout() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText("QuizMe");
         alert.setTitle("About");
+        alert.setGraphic(new ImageView(Resources.getInstance().getIcon()));
         alert.setContentText("QuizMe\n By Vincent Ortland\n vincent.ortland@gmx.de\n http://www.himbiss.de");
+        alert.show();
     }
 }

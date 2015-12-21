@@ -3,7 +3,8 @@ package de.himbiss.quizme.util;
 import com.cathive.fx.guice.GuiceFXMLLoader;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import org.jboss.logging.Logger;
+import javafx.scene.image.Image;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.net.URL;
@@ -15,6 +16,7 @@ public class Resources {
 
     public static final String MAIN_FXML = "/fxml/QuizMe.fxml";
     public static final String TAKE_QUIZ_FXML = "/fxml/TakeQuiz.fxml";
+    public static final String QUIZ_EVALUATION_FXML = "/fxml/QuizEvaluation.fxml";
     public static final String EDIT_QUIZ_FXML = "/fxml/EditQuiz.fxml";
     public static final String WELCOME_FXML = "/fxml/WelcomeView.fxml";
 
@@ -53,4 +55,7 @@ public class Resources {
         return url;
     }
 
+    public Image getIcon() {
+        return new Image(Resources.class.getClassLoader().getResourceAsStream("img/icon.png"));
+    }
 }

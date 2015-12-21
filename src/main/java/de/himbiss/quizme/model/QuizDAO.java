@@ -1,7 +1,7 @@
 package de.himbiss.quizme.model;
 
+import org.apache.log4j.Logger;
 import org.hibernate.jpa.HibernatePersistenceProvider;
-import org.jboss.logging.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -103,7 +103,7 @@ public class QuizDAO {
         return getAllQuizzes().stream().filter( q -> q.getName().equals(quizName) ).findAny().isPresent();
     }
 
-    public Quiz getQuiz(String name) {
-        return entityManager.find(Quiz.class, name);
+    public Quiz getQuiz(Quiz qui) {
+        return entityManager.find(Quiz.class, qui.id);
     }
 }

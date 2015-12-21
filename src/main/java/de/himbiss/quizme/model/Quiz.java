@@ -15,10 +15,11 @@ import java.util.List;
 @Table(name = "Quiz")
 public class Quiz implements Serializable {
 
-    @Column(name = "quiz_id")
-    private Long id;
-
     @Id
+    @GeneratedValue
+    @Column(name = "quiz_id")
+    Long id;
+
     @Column(name = "quiz_name")
     private String name;
 
@@ -80,5 +81,10 @@ public class Quiz implements Serializable {
         else {
             return name;
         }
+    }
+
+    public void setName(String name) {
+        this.name = name;
+        QuizDAO.getInstance().saveQuiz(this);
     }
 }

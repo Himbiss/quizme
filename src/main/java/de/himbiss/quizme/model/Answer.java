@@ -1,6 +1,7 @@
 package de.himbiss.quizme.model;
 
 import de.himbiss.quizme.util.QuizMeProperties;
+import javafx.beans.Observable;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -84,5 +85,10 @@ public class Answer implements Serializable {
         else {
             return answer;
         }
+    }
+
+    public void setTrue(boolean isTrue) {
+        this.isTrue = isTrue;
+        QuizDAO.getInstance().saveQuiz(getQuestion().getQuiz());
     }
 }

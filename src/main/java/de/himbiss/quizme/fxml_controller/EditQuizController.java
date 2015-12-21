@@ -3,14 +3,26 @@ package de.himbiss.quizme.fxml_controller;
 import com.cathive.fx.guice.FXMLController;
 import com.google.inject.Singleton;
 import com.sun.javafx.collections.ObservableListWrapper;
+import de.himbiss.quizme.QuizMe;
 import de.himbiss.quizme.model.Answer;
 import de.himbiss.quizme.model.Question;
 import de.himbiss.quizme.model.Quiz;
 import de.himbiss.quizme.model.QuizDAO;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableBooleanValue;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.cell.CheckBoxListCell;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -29,7 +41,6 @@ public class EditQuizController implements Initializable {
     @FXML
     ListView<Answer> answersListView;
 
-    private String quizName;
     private ObservableList<Question> questionObservableList;
     private ObservableList<Answer> answerObservableList;
     private Question selectedQuestion;
@@ -37,15 +48,31 @@ public class EditQuizController implements Initializable {
     private Quiz quiz;
 
     public void refresh() {
-        quiz = QuizDAO.getInstance().getQuiz(quizName);
+        quiz = QuizDAO.getInstance().getQuiz(quiz);
         refreshQuestionsList();
         refreshAnswersList();
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        questionsListView.onMousePressedProperty().setValue(e -> handleQuestionClicked());
+        questionsListView.setOnMouseClicked( e -> handleQuestionClicked());
         answersListView.onMousePressedProperty().setValue(e -> handleAnswerClicked());
+        Callback<ListView<Answer>, ListCell<Answer>> cellFactory = CheckBoxListCell.forListView(answer -> {
+            ObservableBooleanValue value = new SimpleBooleanProperty(answer.isTrue());
+            value.addListener((observable, oldValue, newValue) -> {
+                if (newValue == false && selectedQuestion.getAnswers().stream().mapToInt( a -> a.isTrue() ? 1 : 0).sum() == 1) {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setHeaderText("Error");
+                    alert.setContentText("At least one answer has to be true!");
+                    alert.show();
+                    refresh();
+                    return;
+                }
+                answer.setTrue(newValue);
+            });
+            return value;
+        });
+        answersListView.setCellFactory(cellFactory);
     }
 
     private void handleQuestionClicked() {
@@ -95,6 +122,8 @@ public class EditQuizController implements Initializable {
     public void handleAddAnswer() {
         if (selectedQuestion != null) {
             Answer answer = QuizDAO.getInstance().createAnswer(selectedQuestion);
+            if (selectedQuestion.getAnswers().size() == 0)
+                answer.setTrue(true);
             selectedQuestion.addAnswer(answer);
             refresh();
         }
@@ -120,11 +149,11 @@ public class EditQuizController implements Initializable {
 
     @FXML
     public void handleStartQuiz() {
-        System.out.println("Starting Quiz " + quiz.getName());
+        QuizMe.startQuiz(quiz);
     }
 
-    public void setQuiz(String quizName) {
-        this.quizName = quizName;
+    public void setQuiz(Quiz quiz) {
+        this.quiz = quiz;
         refresh();
     }
 
