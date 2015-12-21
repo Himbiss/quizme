@@ -53,6 +53,35 @@ public class QuizDAO {
         return persistObject(new Question(quiz));
     }
 
+    public Answer createAnswer(Question question) {
+        logger.info("Creating new Answer on Question '" + question + "'");
+        return persistObject(new Answer(question, "Answer", false));
+    }
+
+    public void deleteQuiz(Quiz quiz) {
+        logger.info("Deleting Quiz '" + quiz + "'");
+        quiz.getQuestionList().forEach(this::deleteQuestion);
+        deleteObject(quiz);
+    }
+
+    public void deleteQuestion(Question question) {
+        logger.info("Deleting Question '" + question + "'");
+        question.getAnswers().forEach(this::deleteAnswer);
+        deleteObject(question);
+    }
+
+    public void deleteAnswer(Answer answer) {
+        logger.info("Deleting Answer '" + answer + "'");
+        deleteObject(answer);
+    }
+
+    private void deleteObject(Object object) {
+        entityManager.getTransaction().begin();
+        entityManager.remove(object);
+        entityManager.flush();
+        entityManager.getTransaction().commit();
+    }
+
     private <T> T persistObject(T object) {
         logger.info("Persisting Object '" + object + "'");
         entityManager.getTransaction().begin();
@@ -70,14 +99,11 @@ public class QuizDAO {
         }
     }
 
-    public void deleteQuiz(Quiz quiz) {
-        logger.info("Deleting Quiz '" + quiz + "'");
-        entityManager.getTransaction().begin();
-        entityManager.remove(quiz);
-        entityManager.getTransaction().commit();
-    }
-
     public boolean checkQuizExists(String quizName) {
         return getAllQuizzes().stream().filter( q -> q.getName().equals(quizName) ).findAny().isPresent();
+    }
+
+    public Quiz getQuiz(String name) {
+        return entityManager.find(Quiz.class, name);
     }
 }

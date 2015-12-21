@@ -42,6 +42,7 @@ public class Quiz implements Serializable {
 
     public void removeQuestion(Question question) {
         questionList.remove(question);
+        QuizDAO.getInstance().deleteQuestion(question);
     }
 
     public List<Question> getQuestionList() {

@@ -30,17 +30,15 @@ public class QuizMeController implements Initializable {
     @FXML
     AnchorPane contentAnchorPane;
 
-    @FXML
-    Label versionLabel;
-
     ObservableList<Quiz> quizList;
+    EditQuizController currentEditQuizController;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         quizList = new ObservableListWrapper<>(new ArrayList<>(QuizDAO.getInstance().getAllQuizzes()));
         quizListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         quizListView.setItems(quizList);
-        versionLabel.setText("Version: " + QuizMeProperties.getInstance().getVersion());
+        setWelcomeViewContent();
     }
 
     @FXML
@@ -70,15 +68,14 @@ public class QuizMeController implements Initializable {
 
     @FXML
     public void handleEditQuiz() {
-
         Quiz quiz = quizListView.getSelectionModel().getSelectedItem();
         if (quiz != null) {
             GuiceFXMLLoader.Result result = Resources.getInstance().loadFXML(Resources.EDIT_QUIZ_FXML);
             if (result != null) {
                 contentAnchorPane.getChildren().clear();
                 contentAnchorPane.getChildren().add(result.getRoot());
-                EditQuizController editQuizController = result.getController();
-                editQuizController.setQuiz(quiz);
+                currentEditQuizController = result.getController();
+                currentEditQuizController.setQuiz(quiz.getName());
             }
         }
     }
@@ -96,6 +93,9 @@ public class QuizMeController implements Initializable {
                 QuizDAO.getInstance().deleteQuiz(quiz);
                 quizList.remove(quiz);
                 quizListView.refresh();
+                if (currentEditQuizController != null && currentEditQuizController.getQuiz().equals(quiz)) {
+                    setWelcomeViewContent();
+                }
             }
         }
     }
@@ -103,6 +103,13 @@ public class QuizMeController implements Initializable {
     @FXML
     public void handleExit() {
         QuizMe.shutdown();
+    }
+
+    private void setWelcomeViewContent() {
+        GuiceFXMLLoader.Result result = Resources.getInstance().loadFXML(Resources.WELCOME_FXML);
+        contentAnchorPane.getChildren().clear();
+        contentAnchorPane.getChildren().add(result.getRoot());
+        currentEditQuizController = null;
     }
 
     @FXML

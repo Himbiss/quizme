@@ -18,7 +18,6 @@ public class Question implements Serializable {
 
     @Id
     @GeneratedValue
-    @Column(name = "question_id")
     private Long id;
 
     @Column(name = "question_name")
@@ -36,6 +35,7 @@ public class Question implements Serializable {
 
     public Question(Quiz quiz) {
         this.quiz = quiz;
+        this.question = "New Question";
     }
 
     public void setQuestion(String question) {
@@ -46,12 +46,17 @@ public class Question implements Serializable {
         return question;
     }
 
+    public Quiz getQuiz() {
+        return quiz;
+    }
+
     public List<Answer> getAnswers() {
         return Collections.unmodifiableList(answers);
     }
 
     public void removeAnswer(Answer answer) {
         answers.remove(answer);
+        QuizDAO.getInstance().deleteAnswer(answer);
     }
 
     public void addAnswer(Answer answer) {
@@ -85,7 +90,7 @@ public class Question implements Serializable {
     public String toString() {
         if (QuizMeProperties.getInstance().isDebugMode()) {
             return "Question{" +
-                    "id=" + id +
+                    "id='" + id + "'" +
                     ", question='" + question + '\'' +
                     ", quiz=" + quiz +
                     '}';

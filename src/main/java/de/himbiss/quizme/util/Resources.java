@@ -16,6 +16,7 @@ public class Resources {
     public static final String MAIN_FXML = "/fxml/QuizMe.fxml";
     public static final String TAKE_QUIZ_FXML = "/fxml/TakeQuiz.fxml";
     public static final String EDIT_QUIZ_FXML = "/fxml/EditQuiz.fxml";
+    public static final String WELCOME_FXML = "/fxml/WelcomeView.fxml";
 
     private final Injector injector = Guice.createInjector(new GuiceModule());
     private static Resources instance;

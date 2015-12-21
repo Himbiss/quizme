@@ -21,13 +21,29 @@
                <children>
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <Label text="Questions" />
+                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                           <children>
+                              <Label contentDisplay="CENTER" text="Questions" />
+                              <Button mnemonicParsing="false" onAction="#handleAddQuestion" text="Add" />
+                              <Button mnemonicParsing="false" onAction="#handleRemoveQuestion" text="Remove" />
+                           </children>
+                        </HBox>
                         <ListView fx:id="questionsListView" minHeight="-Infinity" minWidth="-Infinity" prefHeight="291.0" prefWidth="225.0" />
                      </children>
                   </VBox>
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <Label text="Answers" />
+                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                           <children>
+                              <Label text="Answers" />
+                              <Button mnemonicParsing="false" onAction="#handleAddAnswer" text="Add">
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                              </Button>
+                              <Button mnemonicParsing="false" onAction="#handleRemoveAnswer" text="Remove" />
+                           </children>
+                        </HBox>
                         <ListView fx:id="answersListView" minHeight="-Infinity" minWidth="-Infinity" prefHeight="291.0" prefWidth="225.0" />
                      </children>
                   </VBox>
