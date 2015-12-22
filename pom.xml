@@ -108,6 +108,41 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.4.0</version>
+                <executions>
+                    <execution>
+                        <id>package-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>
+                                ${env.JAVA_HOME}/bin/javapackager
+                            </executable>
+                            <arguments>
+                                <argument>-deploy</argument>
+                                <argument>-native</argument>
+                                <argument>-srcfiles</argument>
+                                <argument>${project.build.finalName}-FINAL.jar</argument>
+                                <argument>-appclass</argument>
+                                <argument>de.himbiss.quizme.QuizMe</argument>
+                                <argument>-name</argument>
+                                <argument>QuizMe</argument>
+                                <argument>-outdir</argument>
+                                <argument>./target</argument>
+                                <argument>-outfile</argument>
+                                <argument>QuizMe</argument>
+                                <argument>-v</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <!-- Configure the jar-assembly plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

@@ -1,9 +1,6 @@
 package de.himbiss.quizme.model;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -23,10 +20,11 @@ public class QuizDAOTest {
 
     private Quiz quiz;
 
+    @Before
     @After
     public void clearDatabase() {
-        if (quiz != null) {
-            QuizDAO.getInstance().deleteQuiz(quiz);
+        for (Quiz foundQuiz : QuizDAO.getInstance().getAllQuizzes()) {
+            QuizDAO.getInstance().deleteQuiz(foundQuiz);
         }
     }
 
@@ -53,7 +51,7 @@ public class QuizDAOTest {
 
         Question question = QuizDAO.getInstance().createQuestion(quiz);
         assertThat(new ArrayList<>(question.getAnswers()), equalTo(Collections.emptyList()));
-        assertNull(question.getQuestion());
+        assertThat(question.getQuestion(), equalTo("New Question"));
         question.setQuestion("Who am I?");
         Answer answer1 = new Answer(question, "A Human", true);
         question.addAnswer(answer1);

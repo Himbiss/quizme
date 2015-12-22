@@ -60,7 +60,6 @@ public class QuizMeController implements Initializable {
                 return quiz;
             }
         }));
-        quizListView.setOnEditCommit(this::onEditCommit);
         quizListView.setItems(quizList);
         setWelcomeViewContent();
     }
@@ -127,11 +126,6 @@ public class QuizMeController implements Initializable {
                 }
             }
         }
-    }
-
-    @FXML
-    private void onEditCommit(ListView.EditEvent<Quiz> editEvent) {
-        System.out.println("AAAAAA");
     }
 
     @FXML

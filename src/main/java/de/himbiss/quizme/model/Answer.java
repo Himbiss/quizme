@@ -91,4 +91,9 @@ public class Answer implements Serializable {
         this.isTrue = isTrue;
         QuizDAO.getInstance().saveQuiz(getQuestion().getQuiz());
     }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
+        QuizDAO.getInstance().saveQuiz(getQuestion().getQuiz());
+    }
 }

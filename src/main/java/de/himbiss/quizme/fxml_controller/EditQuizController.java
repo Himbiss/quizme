@@ -3,6 +3,7 @@ package de.himbiss.quizme.fxml_controller;
 import com.cathive.fx.guice.FXMLController;
 import com.google.inject.Singleton;
 import com.sun.javafx.collections.ObservableListWrapper;
+import com.sun.org.apache.xpath.internal.operations.String;
 import de.himbiss.quizme.QuizMe;
 import de.himbiss.quizme.model.Answer;
 import de.himbiss.quizme.model.Question;
@@ -16,9 +17,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -26,6 +25,7 @@ import javafx.util.Callback;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -46,6 +46,42 @@ public class EditQuizController implements Initializable {
     private Question selectedQuestion;
     private Answer selectedAnswer;
     private Quiz quiz;
+    private ContextMenu answersListContextMenu;
+    private ContextMenu questionListContextMenu;
+
+    public EditQuizController() {
+        MenuItem renameAnswerItem = new MenuItem("Rename Answer");
+        renameAnswerItem.setOnAction( a -> {
+            Answer answer = answersListView.getSelectionModel().getSelectedItem();
+            if (answer != null) {
+                TextInputDialog dialog = new TextInputDialog(answer.getAnswer());
+                dialog.setTitle("Rename Answer");
+                dialog.setContentText("Please enter the new answer:");
+                Optional<java.lang.String> newAnswer = dialog.showAndWait();
+                if (newAnswer.isPresent()) {
+                    answer.setAnswer(newAnswer.get());
+                    refresh();
+                }
+            }
+        });
+        answersListContextMenu = new ContextMenu(renameAnswerItem);
+
+        MenuItem renameQuestionItem = new MenuItem("Rename Question");
+        renameQuestionItem.setOnAction( a -> {
+            Question question = questionsListView.getSelectionModel().getSelectedItem();
+            if (question != null) {
+                TextInputDialog dialog = new TextInputDialog(question.getQuestion());
+                dialog.setTitle("Rename Question");
+                dialog.setContentText("Please enter the new question:");
+                Optional<java.lang.String> newQuestion = dialog.showAndWait();
+                if (newQuestion.isPresent()) {
+                    question.setQuestion(newQuestion.get());
+                    refresh();
+                }
+            }
+        });
+        questionListContextMenu = new ContextMenu(renameQuestionItem);
+    }
 
     public void refresh() {
         quiz = QuizDAO.getInstance().getQuiz(quiz);
@@ -56,7 +92,11 @@ public class EditQuizController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         questionsListView.setOnMouseClicked( e -> handleQuestionClicked());
+        questionsListView.setContextMenu(questionListContextMenu)
+        ;
         answersListView.onMousePressedProperty().setValue(e -> handleAnswerClicked());
+        answersListView.setContextMenu(answersListContextMenu);
+
         Callback<ListView<Answer>, ListCell<Answer>> cellFactory = CheckBoxListCell.forListView(answer -> {
             ObservableBooleanValue value = new SimpleBooleanProperty(answer.isTrue());
             value.addListener((observable, oldValue, newValue) -> {
@@ -79,6 +119,9 @@ public class EditQuizController implements Initializable {
         Question question = questionsListView.getSelectionModel().getSelectedItem();
         if (question != null) {
             selectedQuestion = question;
+            if (! selectedQuestion.getAnswers().isEmpty()) {
+                selectedAnswer = selectedQuestion.getAnswers().get(0);
+            }
             refresh();
         }
     }
@@ -154,6 +197,8 @@ public class EditQuizController implements Initializable {
 
     public void setQuiz(Quiz quiz) {
         this.quiz = quiz;
+        this.selectedQuestion = quiz.getQuestionList().isEmpty() ? null : quiz.getQuestionList().get(0);
+        questionsListView.getSelectionModel().select(selectedQuestion);
         refresh();
     }
 
